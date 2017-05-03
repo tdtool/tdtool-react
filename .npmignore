@@ -38,3 +38,7 @@ jspm_packages
 
 # mocha
 mochawesome-report
+
+# src
+src
+test
