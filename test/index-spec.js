@@ -59,4 +59,12 @@ describe('index', () => {
       ]
     ])
   })
+
+  it('test plugins options', () => {
+    const configObj = new Config()
+    extend(configObj, {
+      plugins: ['test']
+    })
+    expect(configObj.config['rule.jsx'].query.plugins).to.include.members(['test'])
+  })
 })
