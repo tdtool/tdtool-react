@@ -8,9 +8,9 @@
 import path from 'path'
 
 const defaultPresets = [
-  'stage-2',
+  'es2015-ie',
   'react',
-  'es2015-ie'
+  'stage-2',
 ]
 const defaultPlugins = [
   'transform-decorators-legacy',
@@ -44,11 +44,11 @@ module.exports = (config, options) => {
             debug: false
           }
         ]
-      ]: []).concat(presets),
+      ]: []).concat(presets).filter(o => !!o),
       plugins: defaultPlugins.concat((isNode || isDebug) ? [
         'transform-react-jsx-source',
         'transform-react-jsx-self'
-      ] : []).concat(plugins)
+      ] : []).concat(plugins).filter(o => !!o)
     }
   }
   config.add('rule.jsx', {
