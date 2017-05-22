@@ -1,6 +1,6 @@
 {
   "name": "tdtool-react",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "tdtool react extension",
   "main": "lib/index.js",
   "repository": "https://github.com/tdtool/tdtool-react.git",

@@ -15,11 +15,13 @@ const defaultPresets = [
 const defaultPlugins = [
   'transform-decorators-legacy',
   'transform-class-properties',
-  'transform-runtime'
+  'transform-runtime',
+  'lodash'
 ]
 
 module.exports = (config, options) => {
-  let babel
+  let babel;
+  let include = [path.resolve(process.cwd(), 'src')];
   if (!options) {
     babel = {
       cacheDirectory: true,
@@ -28,7 +30,7 @@ module.exports = (config, options) => {
       plugins: defaultPlugins
     }
   } else {
-    const { isDebug, presets, plugins, isNode } = options
+    const { isDebug, presets, plugins, isNode, source } = options
     babel = {
       cacheDirectory: isDebug,
       babelrc: false,
@@ -49,12 +51,13 @@ module.exports = (config, options) => {
         'transform-react-jsx-source',
         'transform-react-jsx-self'
       ] : []).concat(plugins).filter(o => !!o)
-    }
+    };
+    include = include.concat(source).filter(o => !!o);
   }
   config.add('rule.jsx', {
     test: /\.jsx?$/,
     loader: 'babel-loader',
-    include: [path.resolve(process.cwd(), 'src')],
+    include,
     query: babel
   })
   config.add('rule.est', {
