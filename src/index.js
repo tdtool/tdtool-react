@@ -5,19 +5,20 @@
  * @Last modified time: 2017-05-03 12:05:07
  */
 
-import path from 'path'
+import path from 'path';
+import is from './is';
 
 const defaultPresets = [
   'es2015-ie',
   'react',
   'stage-2',
-]
+];
 const defaultPlugins = [
   'transform-decorators-legacy',
   'transform-class-properties',
   'transform-runtime',
   'lodash'
-]
+];
 
 module.exports = (config, options) => {
   let babel;
@@ -28,9 +29,9 @@ module.exports = (config, options) => {
       babelrc: false,
       presets: defaultPresets,
       plugins: defaultPlugins
-    }
+    };
   } else {
-    const { isDebug, presets, plugins, isNode, source } = options
+    const { isDebug, presets, plugins, isNode, source } = options;
     babel = {
       cacheDirectory: isDebug,
       babelrc: false,
@@ -59,9 +60,53 @@ module.exports = (config, options) => {
     loader: 'babel-loader',
     include,
     query: babel
-  })
+  });
   config.add('rule.est', {
     test: /\.est$/,
     use: ['babel-loader', 'template-string-loader']
-  })
+  });
+  // eslint
+  if (is.String(options.eslint)) {
+    config.add('rule.eslint', {
+      test: /\.jsx?$/,
+      enforce: 'pre',
+      loader: 'eslint-loader',
+      options: {
+        emitWarning: true,
+        emitError: true,
+        useEslintrc: false,
+        include,
+        formatter: require('eslint-friendly-formatter'),
+        configFile: options.eslint
+      }
+    });
+  } else if (options.eslint === true) {
+    config.add('rule.eslint', {
+      test: /\.jsx?$/,
+      enforce: 'pre',
+      loader: 'eslint-loader',
+      options: {
+        emitWarning: true,
+        emitError: true,
+        useEslintrc: false,
+        include,
+        formatter: require('eslint-friendly-formatter'),
+        configFile: path.resolve(__dirname, 'eslint.config.js')
+      }
+    });
+  } else if (is.Object(options.eslint)) {
+    config.add('rule.eslint', {
+      test: /\.jsx?$/,
+      enforce: 'pre',
+      loader: 'eslint-loader',
+      options: Object.assign({
+        emitWarning: true,
+        emitError: true,
+        useEslintrc: false,
+        include,
+        formatter: require('eslint-friendly-formatter'),
+        configFile: path.resolve(__dirname, 'eslint.config.js')
+      }, options.eslint)
+    });
+  }
 }
