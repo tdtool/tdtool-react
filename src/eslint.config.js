@@ -7,6 +7,7 @@
 
 module.exports = {
   parser: 'babel-eslint',
+  extends: 'standard',
   plugins: ['react'],
   parserOptions: {
     ecmaVersion: 6,
@@ -27,6 +28,18 @@ module.exports = {
     'computed-property-spacing': [2, 'never'],
     'constructor-super': 0,
     'default-case': 2,
-    'eol-last': 2
+    'eol-last': 2,
+    'arrow-parens': 0,
+    'generator-star-spacing': 0,
+    'semi': 0,
+    'space-before-function-paren': 0
+  },
+  env: {            // 定义预定义的全局变量,比如browser: true，这样你在代码中可以放心使用宿主环境给你提供的全局变量。
+    browser: true, // browser global variables.
+    node: true, // Node.js global variables and Node.js scoping.
+    worker: true, // web workers global variables.
+    mocha: true, // adds all of the Mocha testing global variables.
+    phantomjs: true, // PhantomJS global variables.
+    serviceworker: true // Service Worker global variables.
   }
 };
