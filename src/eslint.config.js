@@ -17,6 +17,8 @@ module.exports = {
     }
   },
   rules: {
+    'no-mixed-operators': 0,
+    'no-undef': 0,
     'func-names': 0,
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
