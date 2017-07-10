@@ -66,6 +66,9 @@ module.exports = (config, options) => {
     use: ['babel-loader', 'template-string-loader']
   });
   // eslint
+  if (!options) {
+    return;
+  }
   if (is.String(options.eslint)) {
     config.add('rule.eslint', {
       test: /\.jsx?$/,
