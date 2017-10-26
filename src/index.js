@@ -55,16 +55,51 @@ module.exports = (config, options) => {
     };
     include = include.concat(source).filter(o => !!o);
   }
-  config.add('rule.jsx', {
-    test: /\.jsx?$/,
-    loader: 'babel-loader',
-    include,
-    query: babel
-  });
-  config.add('rule.est', {
-    test: /\.est$/,
-    use: ['babel-loader', 'template-string-loader']
-  });
+  if (options.isHapplyPack) {
+    const HappyPack = require('happypack'),
+          os = require('os'),
+          happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
+    config.add('rule.jsx', {
+      test: /\.jsx?$/,
+      loader: 'HappyPack/loader?id=jsHappy',
+      include
+    });
+    config.add('plugins.jsx', new HappyPack({
+      id: 'jsHappy',
+      cache: true,
+      threadPool: happyThreadPool,
+      loaders: [{
+        loader: 'babel-loader',
+        query: babel
+      }]
+    }))
+    config.add('rule.est', {
+      test: /\.est$/,
+      loader: 'HappyPack/loader?id=estHappy',
+      include
+    });
+    config.add('plugins.est', new HappyPack({
+      id: 'estHappy',
+      cache: true,
+      threadPool: happyThreadPool,
+      loaders: [{
+        loader: 'babel-loader',
+        query: babel
+      }]
+    }))
+  } else {
+    config.add('rule.jsx', {
+      test: /\.jsx?$/,
+      loader: 'babel-loader',
+      include,
+      query: babel
+    });
+    config.add('rule.est', {
+      test: /\.est$/,
+      use: ['babel-loader', 'template-string-loader']
+    });
+  }
+  
   // eslint
   if (!options) {
     return;
