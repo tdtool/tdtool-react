@@ -65,13 +65,13 @@ module.exports = (config, options) => {
     test: /\.est$/,
     use: ['babel-loader', 'template-string-loader']
   });
-  if (options.happypack !== false) {
-    config.add('happypack.jsx', true);
-    config.add('happypack.est', true);
-  }
   // eslint
   if (!options) {
     return;
+  }
+  if (options.happypack !== false) {
+    config.add('happypack.jsx', true);
+    config.add('happypack.est', true);
   }
   if (is.String(options.eslint)) {
     config.add('rule.eslint', {
