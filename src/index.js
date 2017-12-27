@@ -69,10 +69,6 @@ module.exports = (config, options) => {
   if (!options) {
     return;
   }
-  if (options.happypack !== false) {
-    config.add('happypack.jsx', true);
-    config.add('happypack.est', true);
-  }
   if (is.String(options.eslint)) {
     config.add('rule.eslint', {
       test: /\.jsx?$/,
