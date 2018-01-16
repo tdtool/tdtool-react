@@ -9,9 +9,8 @@ import path from 'path';
 import is from './is';
 
 const defaultPresets = [
-  'es2015-ie',
   'react',
-  'stage-2',
+  'stage-2'
 ];
 const defaultPlugins = [
   'transform-decorators-legacy',
@@ -31,23 +30,24 @@ module.exports = (config, options) => {
       plugins: defaultPlugins
     };
   } else {
-    const { isDebug, presets, plugins, isNode, source } = options;
+    const { isDebug, presets, plugins, isNode, source, targets } = options;
     babel = {
       cacheDirectory: isDebug,
       babelrc: false,
-      presets: defaultPresets.concat(isNode ? [
+      presets: defaultPresets.concat([
         [
           'env',
           {
-            targets: {
-              node: 'current'
+            targets: targets || {
+              node: 'current',
+              browsers: ["last 2 versions", "safari >= 7", "ie >= 9"]
             },
             modules: false,
             useBuiltIns: false,
             debug: false
           }
         ]
-      ]: []).concat(presets).filter(o => !!o),
+      ]).concat(presets).filter(o => !!o),
       plugins: defaultPlugins.concat((isNode || isDebug) ? [
         'transform-react-jsx-source',
         'transform-react-jsx-self'
