@@ -14,9 +14,7 @@ const defaultPresets = [
 ];
 const defaultPlugins = [
   'transform-decorators-legacy',
-  'transform-class-properties',
-  'transform-runtime',
-  'lodash'
+  'transform-class-properties'
 ];
 
 module.exports = (config, options) => {
@@ -42,8 +40,7 @@ module.exports = (config, options) => {
               node: 'current',
               browsers: ["last 2 versions", "safari >= 7", "ie >= 9"]
             },
-            modules: false,
-            useBuiltIns: false,
+            useBuiltIns: 'runtime',
             debug: false
           }
         ]
