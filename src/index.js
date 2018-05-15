@@ -8,6 +8,20 @@
 import path from 'path';
 import is from './is';
 
+function getEnvPreset(targets) {
+  return [
+    'env',
+    {
+      targets: targets || {
+        node: 'current',
+        browsers: ["last 2 versions", "safari >= 7", "ie >= 9"]
+      },
+      useBuiltIns: false,
+      debug: false
+    }
+  ]
+}
+
 const defaultPresets = [
   'react',
   'stage-2'
@@ -18,6 +32,8 @@ const defaultPlugins = [
   'transform-runtime'
 ];
 
+
+
 module.exports = (config, options) => {
   let babel;
   let include = [path.resolve(process.cwd(), 'src')];
@@ -25,7 +41,7 @@ module.exports = (config, options) => {
     babel = {
       cacheDirectory: true,
       babelrc: false,
-      presets: defaultPresets,
+      presets: defaultPresets.concat([getEnvPreset()]),
       plugins: defaultPlugins
     };
   } else {
@@ -34,17 +50,7 @@ module.exports = (config, options) => {
       cacheDirectory: isDebug,
       babelrc: false,
       presets: defaultPresets.concat([
-        [
-          'env',
-          {
-            targets: targets || {
-              node: 'current',
-              browsers: ["last 2 versions", "safari >= 7", "ie >= 9"]
-            },
-            useBuiltIns: false,
-            debug: false
-          }
-        ]
+        getEnvPreset(targets)
       ]).concat(presets).filter(o => !!o),
       plugins: defaultPlugins.concat((isNode || isDebug) ? [
         'transform-react-jsx-source',
