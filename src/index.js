@@ -34,7 +34,7 @@ const defaultPlugins = [
 
 
 
-module.exports = (config, options) => {
+exports.load = (config, options) => {
   let babel;
   let include = [path.resolve(process.cwd(), 'src')];
   if (!options) {
@@ -115,5 +115,47 @@ module.exports = (config, options) => {
         configFile: path.resolve(__dirname, 'eslint.config.js')
       }, options.eslint)
     });
+  }
+}
+
+exports.cliStartCallback = function(config, nodeDevServer) {
+  if (nodeDevServer) {
+    if (is.Array(config.entry)) {
+      config.entry.unshift('react-hot-loader/patch')
+    } else if (is.Object(config.entry)) {
+      Object.keys(config.entry).forEach(key => {
+        if (is.Array(config.entry[key])) {
+          config.entry[key].unshift('react-hot-loader/patch')
+        } else {
+          config.entry[key] = ['react-hot-loader/patch', config.entry[key]]
+        }
+      })
+    } else {
+      config.entry = ['react-hot-loader/patch', config.entry]
+    }
+  
+    const babelLoader = config.module.rules.find(x => x.loader === 'babel-loader')
+    if (babelLoader && babelLoader.query) {
+      babelLoader.query.plugins = ['react-hot-loader/babel'].concat(babelLoader.query.plugins || [])
+    }
+  } else {
+    const rule = config.module.rules.find(x => x.loader === 'babel-loader')
+    if (rule && rule.query) {
+      rule.query.presets = ['react-hmre'].concat(rule.query.presets || []);
+      // rule.query.plugins = [ [
+      //   require.resolve('babel-plugin-react-transform'), {
+      //     transforms: [
+      //       {
+      //         transform: 'react-transform-hmr',
+      //         imports: ['react'],
+      //         locals: ['module'],
+      //       }, {
+      //         transform: 'react-transform-catch-errors',
+      //         imports: ['react', 'redbox-react'],
+      //       },
+      //     ],
+      //   }
+      // ]].concat(rule.query.plugins || [])
+    }
   }
 }
