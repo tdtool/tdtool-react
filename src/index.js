@@ -14,9 +14,9 @@ function getEnvPreset(targets) {
     {
       targets: targets || {
         node: 'current',
-        browsers: ["last 2 versions", "safari >= 7", "ie >= 9"]
+        browsers: ["last 2 versions", "safari >= 7", "ie >= 9", 'chrome >= 52']
       },
-      useBuiltIns: false,
+      useBuiltIns: true,
       debug: false
     }
   ]
@@ -24,12 +24,12 @@ function getEnvPreset(targets) {
 
 const defaultPresets = [
   'react',
-  'stage-2'
+  'stage-0'
 ];
 const defaultPlugins = [
   'transform-decorators-legacy',
-  'transform-class-properties',
-  'transform-runtime'
+  // 'transform-class-properties',
+  // 'transform-runtime'
 ];
 
 
