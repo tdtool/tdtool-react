@@ -28,7 +28,7 @@ const defaultPresets = [
 ];
 const defaultPlugins = [
   'transform-decorators-legacy',
-  // 'transform-class-properties',
+  'transform-class-properties',
   // 'transform-runtime'
 ];
 
@@ -133,7 +133,7 @@ exports.cliStartCallback = function(config, nodeDevServer) {
     } else {
       config.entry = ['react-hot-loader/patch', config.entry]
     }
-  
+
     const babelLoader = config.module.rules.find(x => x.loader === 'babel-loader')
     if (babelLoader && babelLoader.query) {
       babelLoader.query.plugins = ['react-hot-loader/babel'].concat(babelLoader.query.plugins || [])
